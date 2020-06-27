@@ -14,13 +14,16 @@ class Client {
   name: string;
 
   @Column()
-  sexo: string;
+  gender: string;
 
   @CreateDateColumn()
   birthdate: Date;
 
   @CreateDateColumn()
-  applyDate: Date;
+  created_at: Date;
+
+  @CreateDateColumn()
+  updated_at: Date;
 
   @Column()
   cpf: string;

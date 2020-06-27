@@ -10,8 +10,8 @@ import Client from './Client';
 
 @Entity('evaluations')
 class Evaluation {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @CreateDateColumn()
   created_at: string;

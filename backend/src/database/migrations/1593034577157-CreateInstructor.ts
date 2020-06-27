@@ -5,42 +5,39 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateEvaluation1592956241741
+export default class CreateInstructor1593034577157
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'evaluations',
+        name: 'instructors',
         columns: [
           {
             name: 'id',
-            type: 'serial',
-            isPrimary: true,
-            generationStrategy: 'increment',
-          },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-          },
-          {
-            name: 'next_date',
-            type: 'timestamp',
-          },
-          {
-            name: 'client_id',
             type: 'uuid',
-            isNullable: true,
+            isPrimary: true,
+            generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
+          },
+          {
+            name: 'password',
+            type: 'varchar',
+          },
+          {
+            name: 'user_id',
+            type: 'uuid',
           },
         ],
       }),
     );
+
     await queryRunner.createForeignKey(
-      'evaluations',
+      'instructors',
       new TableForeignKey({
-        name: 'EvaluationClient',
-        columnNames: ['client_id'],
+        name: 'UserInstructor',
+        columnNames: ['user_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'clients',
+        referencedTableName: 'users',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),
@@ -48,7 +45,7 @@ export default class CreateEvaluation1592956241741
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('evaluations', 'EvaluationClient');
-    await queryRunner.dropTable('evaluations');
+    await queryRunner.dropForeignKey('instructors', 'UserInstructor');
+    await queryRunner.dropTable('instructors');
   }
 }
