@@ -14,7 +14,7 @@ class User {
   name: string;
 
   @CreateDateColumn()
-  birthdate: Date;
+  birthDate: Date;
 
   @Column()
   cpf: string;
