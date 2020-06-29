@@ -119,7 +119,7 @@ clientRouter.delete('/:id', async (request, response) => {
 
   return response
     .status(201)
-    .json({ message: `User ${clientExists.id} removed` });
+    .json({ message: `Client ${clientExists.id} removed` });
 });
 
 export default clientRouter;
