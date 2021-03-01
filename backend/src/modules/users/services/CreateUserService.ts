@@ -1,49 +1,38 @@
 import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-import User from '../models/User';
+import User from '@modules/users/infra/typeorm/entities/User'
 
 interface Request {
-  id: string;
   name: string;
   birthDate: string;
   cpf: string;
   address: string;
   contact: string;
-  contract: boolean;
   email: string;
   wage: number;
   password: string;
 }
 
-class UpdateUserService {
+class CreateUserService {
   public async execute({
-    id,
     name,
     birthDate,
     cpf,
     address,
     contact,
-    contract,
     email,
     wage,
     password,
   }: Request): Promise<User> {
     const userRepository = getRepository(User);
 
-    const checkUserExists = await userRepository.findOne(id);
+    const checkUserExists = await userRepository.findOne({
+      where: [{ cpf }],
+    });
 
-    if (!checkUserExists) {
-      throw new Error("User doesn't exists");
-    }
-
-    if (email !== checkUserExists.email) {
-      const emailExists = await userRepository.findOne({
-        where: { email },
-      });
-      if (emailExists) {
-        throw Error('Email already in use');
-      }
+    if (checkUserExists) {
+      throw new Error('User already exists');
     }
 
     const hashedPassword = await hash(password, 8);
@@ -53,19 +42,17 @@ class UpdateUserService {
       birthDate,
       cpf,
       address,
-      contract,
+      contract: true,
       email,
       contact,
       password: hashedPassword,
       wage,
     });
 
-    await userRepository.update(id, user);
-
-    delete user.password;
+    await userRepository.save(user);
 
     return user;
   }
 }
 
-export default UpdateUserService;
+export default CreateUserService;

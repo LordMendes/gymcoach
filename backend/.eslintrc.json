@@ -1,7 +1,8 @@
 {
   "env": {
       "es6": true,
-      "node": true
+      "node": true,
+      "jest/globals": true
   },
   "extends": [
       "airbnb-base",
@@ -27,6 +28,7 @@
     "class-methods-use-this": "off",
     "@typescript-eslint/camelcase": "off",
     "camelcase": "off",
+    "@typescript-eslint/interface-name-prefix": ["error", {"prefixWithI" : "always"}],
     "import/extensions": [
       "error",
       "ignorePackages",

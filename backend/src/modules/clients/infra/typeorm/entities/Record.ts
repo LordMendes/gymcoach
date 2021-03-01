@@ -8,8 +8,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import Instructor from './Instructor';
-import Client from './Client';
+import Instructor from '@modules/instructors/infra/typeorm/entities//Instructor';
+import Client from '@modules/clients/infra/typeorm/entities/Client';
 
 @Entity('records')
 class Record {

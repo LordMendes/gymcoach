@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-import Client from './Client';
+import Client from '@modules/clients/infra/typeorm/entities/Client';
 
 @Entity('evaluations')
 class Evaluation {

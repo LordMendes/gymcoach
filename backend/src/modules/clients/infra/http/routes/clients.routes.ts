@@ -2,10 +2,10 @@ import { Router } from 'express';
 import { parseISO } from 'date-fns';
 import { getRepository } from 'typeorm';
 
-import CreateClientService from '../services/CreateClientService';
-import UpdateClientService from '../services/UpdateClientService';
+import CreateClientService from '@modules/clients/services/CreateClientService';
+import UpdateClientService from '@modules/clients/services/UpdateClientService'
 
-import Client from '../models/Client';
+import Client from '@modules/clients/infra/typeorm/entities/Client'
 
 const clientRouter = Router();
 // Create Client
@@ -49,8 +49,9 @@ clientRouter.get('/', async (request, response) => {
   const clients = await clientsRepository.find();
 
   const noPasswordClients = clients.map(client => {
-    delete client.password;
-    return client;
+    const newClient = client;
+    delete newClient.password;
+    return newClient;
   });
 
   return response.status(201).json(noPasswordClients);

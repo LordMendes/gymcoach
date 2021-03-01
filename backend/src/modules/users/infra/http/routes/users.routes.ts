@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
 
-import User from '../models/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 
-import CreateUserService from '../services/CreateUserService';
-import UpdateUserService from '../services/UpdateUserService';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import UpdateUserService from '@modules/users/services/UpdateUserService';
 
 const usersRouter = Router();
 
@@ -49,8 +49,9 @@ usersRouter.get('/', async (request, response) => {
   const users = await usersRepository.find();
 
   const noPasswordUser = users.map(user => {
-    delete user.password;
-    return user;
+    const newUser = user;
+    delete newUser.password;
+    return newUser;
   });
 
   return response.status(201).json(noPasswordUser);

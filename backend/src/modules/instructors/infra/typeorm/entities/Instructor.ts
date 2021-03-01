@@ -7,8 +7,8 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import User from './User';
-import Record from './Record';
+import User from '@modules/users/infra/typeorm/entities/User';
+import Record from '@modules/clients/infra/typeorm/entities/Record';
 
 @Entity('instructor')
 class Instructor {

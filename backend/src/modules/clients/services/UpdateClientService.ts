@@ -1,9 +1,10 @@
 import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-import Client from '../models/Client';
+import Client from '@modules/clients/infra/typeorm/entities/Client';
 
 interface Request {
+  id: string;
   name: string;
   gender: string;
   birthdate: Date;
@@ -13,8 +14,9 @@ interface Request {
   password: string;
 }
 
-class CreateClientService {
+class UpdateClientService {
   public async execute({
+    id,
     name,
     gender,
     birthdate,
@@ -25,12 +27,19 @@ class CreateClientService {
   }: Request): Promise<Client> {
     const clientRepository = getRepository(Client);
 
-    const checkClientExists = await clientRepository.findOne({
-      where: [{ cpf }, { email }],
-    });
+    const checkClientExists = await clientRepository.findOne(id);
 
-    if (checkClientExists) {
-      throw new Error('Client already exists');
+    if (!checkClientExists) {
+      throw new Error("Client doesn't exists");
+    }
+
+    if (email !== checkClientExists.email) {
+      const emailExists = await clientRepository.findOne({
+        where: { email },
+      });
+      if (emailExists) {
+        throw Error('Email already in use');
+      }
     }
 
     const hashedPassword = await hash(password, 8);
@@ -45,10 +54,12 @@ class CreateClientService {
       password: hashedPassword,
     });
 
-    await clientRepository.save(client);
+    await clientRepository.update(id, client);
+
+    delete client.password;
 
     return client;
   }
 }
 
-export default CreateClientService;
+export default UpdateClientService;
